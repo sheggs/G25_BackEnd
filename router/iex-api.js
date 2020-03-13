@@ -1,8 +1,10 @@
+// @Mahdi(Sheggs)
 // Importing libraries.
 const express = require('express');
 const bodyParser = require('body-parser')
 const router = express.Router();
 const IEXCloud = require('../iexcloud/iexcloud')
+
 
 // This route will get all quotes for the pre-determined stocks. @Mahdi
 router.get('/api/quote', (request,response) => {
@@ -12,8 +14,16 @@ router.get('/api/quote', (request,response) => {
         response.send(resp)
     })
 })
-
-
+// This route will return a link to the image.  @Mahdi
+router.get('/api/logo/:stock',(request,response) => {
+    // Setting parameter to uppercase
+    let param = request.params.stock.toUpperCase()
+    // Calling the getLogo function from the IEXCloud object.
+    IEXCloud.getLogo(param,(r) => {
+        // Get the Base URL and concatenate with the image file name.
+        response.send(IEXCloud.getURL() + "/assests/" + r)
+    })
+})
 
 // These are direct routes that will obtain straight from IEXCloud. 
 
