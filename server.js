@@ -6,6 +6,12 @@ const IEXCloud = require('./iexcloud/iexcloud')
 const iexAPI = require('./router/iex-api');
 const socketIO = require('socket.io')(8000);
 const app = express();
+const cors = require('cors')
+let corsOptions = {
+    origin: 'http://localhost:81/*'
+}
+
+app.use(cors())
 // Attaching middlewares the ExpressJS
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));

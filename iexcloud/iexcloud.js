@@ -14,26 +14,35 @@ const BASE_URL = 'https://sandbox.iexapis.com/stable'
 const FRONT_END = 'http://localhost:3000'
 
 // STOCKS THAT WE WILL BE USING. This is temporary this must be retrieved from the admin page.
-const STOCK_LIST = ['AAPL', 'AMZN', 'MSFT']
+const STOCK_LIST = [
+    ["AAPL","apple.png"],
+    ["AMZN","amazon.png"],
+    ["MSFT","microsoft.png"],
+]
 
 /* The Logo Bank will have all the logos for each company. All the file name should be relative to those stored in the public folder in
 the front end */
-const LOGO_BANK = [
-    ["AAPL","apple.png"],
-    ["AMZN","apple.png"],
-    ["MSFT","apple.png"],
-]
+
 // The JSON object that will be storing the 
 let recent_query = {}
 
 // This object will store all the IEXCloud functions
 let iexcloud = {
+    getAllLogo: function(response){
+        // Store all the logo data inside this json object
+        let logos = {}
+        // Loop through all the companies
+        for(let i = 0; i<STOCK_LIST.length;i++){
+            logos[STOCK_LIST[i][0]] = STOCK_LIST[i][1]
+        }
+        response(logos)
+    },
     // This function will retireve the company logo.
     getLogo : function(name,response){
         let found = false;
-        for(let i = 0; i<LOGO_BANK.length;i++){
-          if(LOGO_BANK[i][0]==name){
-           response(LOGO_BANK[i][1])   
+        for(let i = 0; i<STOCK_LIST.length;i++){
+          if(STOCK_LIST[i][0]==name){
+           response(STOCK_LIST[i][1])   
            found = true;
           }
         }
@@ -100,10 +109,11 @@ setInterval(() => {
     // Loop through every single company
     for (let i = 0; i < STOCK_LIST.length; i++) {
         // Get the stock quote for each company and store it in the recent_query JSON object.
-        iexcloud.getStockQuote(STOCK_LIST[i], (resp) => {
-            recent_query[STOCK_LIST[i]] = resp
+        iexcloud.getStockQuote(STOCK_LIST[i][0], (resp) => {
+            recent_query[STOCK_LIST[i][0]] = resp
         })
     }
+
 }, 5000)
 
 

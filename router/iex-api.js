@@ -21,10 +21,16 @@ router.get('/api/logo/:stock',(request,response) => {
     // Calling the getLogo function from the IEXCloud object.
     IEXCloud.getLogo(param,(r) => {
         // Get the Base URL and concatenate with the image file name.
-        response.send(IEXCloud.getURL() + "/assests/" + r)
+        response.send("/assests/" + r)
     })
 })
-
+// Get JSON for all logo.
+router.get('/api/all-logo',(request,response) => {
+    IEXCloud.getAllLogo((r) => {
+        // Send JSON of all logos
+        response.send(r)
+    })
+})
 // These are direct routes that will obtain straight from IEXCloud. 
 
 // This route will get the stock quote. @Mahdi
