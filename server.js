@@ -4,11 +4,13 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const IEXCloud = require('./iexcloud/iexcloud')
 const iexAPI = require('./router/iex-api');
-const socketIO = require('socket.io')(8000);
 const app = express();
+const http = require('http').Server(app);
+const socketIO = require('socket.io')(http);
 const cors = require('cors')
+const PORT = process.env.port || 4001
 let corsOptions = {
-    origin: 'http://localhost:81/*'
+    origin: `http://localhost:${PORT}/*`
 }
 
 app.use(cors())
@@ -18,17 +20,23 @@ app.use(bodyParser.urlencoded({extended:false}));
 // Adding the IEXAPI route
 app.use('/',iexAPI);
 
-// Starting the Server on Port 81
-app.listen(81, () =>{
-    console.log("Server Started");
+// Starting the Server
+http.listen(PORT, () => {
+    console.log(`Server Started on port ${PORT}`);
 })
 
-
-// Socket stuff
-socketIO.on('connection',(socket) => {
-    setInterval(() => {
-        IEXCloud.reducedQueryAll((r) => {
-            socket.broadcast.emit('stock-update', r)
-        })
-    },10000)
-})
+let interval;
+socketIO.on("connection", socket => {
+  console.log("New client connected");
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => {
+    IEXCloud.reducedQueryAll((r) => {
+        socket.emit('stock update', r)
+    })
+  }, 3000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
