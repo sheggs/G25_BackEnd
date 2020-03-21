@@ -73,6 +73,14 @@ let iexcloud = {
             response(undefined)
         }
     },
+    getBatchStockQuotes: async function (stocks, response) {
+        try {
+            const resp = await Axios.get(BASE_URL + "/stock/market/batch?symbols=" + stocks.join() + "&types=quote&token=" + API_KEY)
+            response(resp.data)
+        } catch (err) {
+            response(undefined)
+        }
+    },
     // Only use for production. Gets the logo for the company.
     getProductionStockLogo: async function (stock, response) {
         // Trying to see if we get an 404 response
@@ -109,7 +117,7 @@ setInterval(() => {
         })
     }
 
-}, 5000)
+}, 10000)
 
 
 // Returns the JSON object that contains all the functions.
