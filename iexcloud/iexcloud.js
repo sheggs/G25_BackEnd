@@ -10,8 +10,6 @@ const SANDBOX_KEY = 'Tpk_07373ee455894972bea090981b4284c7'
 const PRODUCTION_KEY = 'pk_9a501456467c4257b85aeb036b0b1ad5'
 const API_KEY = SANDBOX_KEY
 const BASE_URL = 'https://sandbox.iexapis.com/stable'
-// WEBSITE CONFIGURATION
-const FRONT_END = 'http://localhost:3000'
 
 // STOCKS THAT WE WILL BE USING. This is temporary this must be retrieved from the admin page.
 const STOCK_LIST = [
@@ -99,9 +97,6 @@ let iexcloud = {
             response(undefined)
         }
     },
-    getURL : function (){
-        return FRONT_END
-    }
 }
 
 // Get stock data every 10 seconds and store locally
